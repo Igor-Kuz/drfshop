@@ -4,7 +4,6 @@ Project to trane with django rest-framework
 Репозиторий интернет-магазина на Django rest-framework
 
 Открыть терминал или консоль и перейти в нужную Вам директорию
-Прописать команду git clone git@gitlab.com:PyCoding1/django3-ecommerce-v2.git
 
 Если Вы используете https, то: git clone https://github.com/Igor-Kuz/drfshop.git
 
