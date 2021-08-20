@@ -1,0 +1,7 @@
+db.sqlite3
+*/__pycache__/
+mainapp/templatetags/__pycache__/
+*/migrations/*
+media/*
+.idea
+venv
