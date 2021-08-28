@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from .models import *
 from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, CategoryCreateSerializer
 
@@ -44,18 +45,17 @@ class ProductsList(generics.ListAPIView):
     filterset_class = ProductFilter
 
 
+class CategoryPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
+
 class CategoryList(ListAPIView):
     """отображение категорий"""
     serializer_class = CategoryListSerializer
+    pagination_class = CategoryPagination
     queryset = Category.objects.all()
-
-"""class CategoryList(ListAPIView):
-      #  отображение категорий
-    def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategoryListSerializer(categories, many=True)
-        return Response(serializer.data)
-"""
 
 
 class CategoryCreateAPIView(APIView):
@@ -65,8 +65,11 @@ class CategoryCreateAPIView(APIView):
         if category.is_valid():
             category.save()
         return Response(status=201)
-    """
-    serializer_class = CategorySerializer
+
+
+class ListCreateCategoryAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
+    """Добавление категории через generics"""
+    serializer_class = CategoryCreateSerializer
+    pagination_class = CategoryPagination
     queryset = Category.objects.all()
     lookup_field = 'id'
-    """

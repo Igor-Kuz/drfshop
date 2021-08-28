@@ -7,4 +7,6 @@ urlpatterns = [
     path("product-filter/", ProductsList.as_view()),
     path("categorys/", CategoryList.as_view()),
     path("categories/", CategoryCreateAPIView.as_view()),
+    path("create-categories/<str:id>/", ListCreateCategoryAPIView.as_view())
+
 ]
