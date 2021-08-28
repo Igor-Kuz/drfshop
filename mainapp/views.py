@@ -1,10 +1,10 @@
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
 from rest_framework import generics
-from django_filters.rest_framework import DjangoFilterBackend
 from .models import *
-from .serializers import ProductListSerializer,  ProductDetailSerializer
+from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, CategoryCreateSerializer
 
 
 class ProductListView(APIView):
@@ -20,7 +20,6 @@ class ProductDetailView(APIView):
     def get(self, request, pk):
         product = Product.objects.get(id=pk, )
         serializer = ProductDetailSerializer(product)
-        filter_backends = (filters.DjangoFilterBackend,)
         return Response(serializer.data)
 
 
@@ -43,3 +42,31 @@ class ProductsList(generics.ListAPIView):
     serializer_class = ProductListSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ProductFilter
+
+
+class CategoryList(ListAPIView):
+    """отображение категорий"""
+    serializer_class = CategoryListSerializer
+    queryset = Category.objects.all()
+
+"""class CategoryList(ListAPIView):
+      #  отображение категорий
+    def get(self, request):
+        categories = Category.objects.all()
+        serializer = CategoryListSerializer(categories, many=True)
+        return Response(serializer.data)
+"""
+
+
+class CategoryCreateAPIView(APIView):
+    """Добавление категории"""
+    def post(self, request):
+        category = CategoryCreateSerializer(data=request.data)
+        if category.is_valid():
+            category.save()
+        return Response(status=201)
+    """
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+    lookup_field = 'id'
+    """

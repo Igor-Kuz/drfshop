@@ -20,3 +20,26 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Product
 		fields = "__all__"
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+	"""отображение категорий"""
+	name = serializers.CharField(required=True)
+	slug = serializers.SlugField
+
+
+	class Meta:
+		model = Category
+		fields = [
+			'id', 'name', 'slug'
+		]
+
+
+
+
+class CategoryCreateSerializer(serializers.ModelSerializer):
+	"""добавление категории"""
+
+	class Meta:
+		model = Category
+		fields = "__all__"
