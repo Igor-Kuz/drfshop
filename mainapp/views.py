@@ -5,8 +5,8 @@ from django_filters import rest_framework as filters
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from .models import *
-from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, CategoryCreateSerializer
-
+from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, \
+                            CreateCartSerializer, CategoryCreateSerializer, CartSerializer, ProductSerializer
 
 class ProductListView(APIView):
     """Вывод списка товаров"""
@@ -73,3 +73,38 @@ class ListCreateCategoryAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
     pagination_class = CategoryPagination
     queryset = Category.objects.all()
     lookup_field = 'id'
+
+
+class CartListAPIView(APIView):
+    """Отображение корзины"""
+    def get(self, request):
+        cart_list = Cart.objects.all()
+        serializer = CartSerializer(cart_list, many=True)
+        return Response(serializer.data)
+
+
+# class CartCreateAPIView(APIView):
+#     """добавление товара в корзину"""
+#     def post(self, request):
+#         cartproduct = CreateCartSerializer(data=request.data)
+#         if cartproduct.is_valid():
+#             cartproduct.save()
+#         return Response(status=201)
+
+
+class CartCreateAPIView(generics.CreateAPIView):
+    """добавление товара в корзину"""
+    queryset = Cart.objects.all()
+    serializer_class = CreateCartSerializer
+    # def post(self, request):
+    #     cartproduct = CreateCartSerializer(data=request.data)
+    #     if cartproduct.is_valid():
+    #         cartproduct.save()
+    #     return Response(status=201)
+
+
+class CartProductCreateAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
+    """Работем с классом cart product"""
+    serializer_class = ProductSerializer
+    queryset = CartProduct.objects.all()
+    lookup_field = 'pk'
