@@ -8,6 +8,7 @@ from .models import *
 from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, \
                             CreateCartSerializer, CategoryCreateSerializer, CartSerializer, ProductSerializer
 
+
 class ProductListView(APIView):
     """Вывод списка товаров"""
     def get(self, request):

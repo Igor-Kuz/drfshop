@@ -29,7 +29,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
         model = Category
         fields = [
             'id', 'name', 'slug'
-]
+        ]
 
 
 class CategoryCreateSerializer(serializers.ModelSerializer):
@@ -47,16 +47,17 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = [
             'category', 'title', 'description', 'price'
-]
+        ]
 
 
 class CreateCartSerializer(serializers.ModelSerializer):
     """добавление товара"""
     class Meta:
         model = Cart
-        fields =[
+        fields = [
            'owner', 'products'
-]
+        ]
+
 
 class ProductSerializer(serializers.ModelSerializer):
     """Добавление товара"""
