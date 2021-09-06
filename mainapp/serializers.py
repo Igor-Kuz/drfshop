@@ -64,3 +64,17 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartProduct
         fields = "__all__"
+
+
+class CreateOrderSerializer(serializers.ModelSerializer):
+    """Создание заказа"""
+    class Meta:
+        model = Order
+        exclude = ("customer", "status", 'cart')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """Вывод заказа"""
+    class Meta:
+        model = Order
+        fields = "__all__"

@@ -2,11 +2,12 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
 from .models import *
 from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, \
-                            CreateCartSerializer, CategoryCreateSerializer, CartSerializer, ProductSerializer
+                            CreateCartSerializer, CategoryCreateSerializer, CartSerializer, ProductSerializer, \
+                            CreateOrderSerializer, OrderSerializer
 
 
 class ProductListView(APIView):
@@ -79,9 +80,10 @@ class ListCreateCategoryAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
 class CartListAPIView(APIView):
     """Отображение корзины"""
     def get(self, request):
-        cart_list = Cart.objects.all()
+        cart_list = Cart.objects.filter(owner=self.request.user.customer, in_order=False)
         serializer = CartSerializer(cart_list, many=True)
         return Response(serializer.data)
+    #  -> cart product +cart
 
 
 # class CartCreateAPIView(APIView):
@@ -109,3 +111,30 @@ class CartProductCreateAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
     serializer_class = ProductSerializer
     queryset = CartProduct.objects.all()
     lookup_field = 'pk'
+
+
+class CreatOrderAPIView(generics.ListCreateAPIView):
+    """создание нового заказа"""
+    serializer_class = CreateOrderSerializer
+    queryset = Order.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(customer=self.request.user.customer)
+
+    def perform_create(self, serializer):
+        cart = Cart.objects.get(owner=self.request.user.customer, in_order=False)
+        serializer.save(cart=cart, customer=self.request.user.customer)
+        cart.in_order = True
+        cart.save()
+        Cart.objects.create(owner=self.request.user.customer)
+
+
+class OrderAPIView(generics.RetrieveAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(customer=self.request.user.customer)
+
+#  -> generics
