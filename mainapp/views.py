@@ -10,20 +10,37 @@ from .serializers import ProductListSerializer,  ProductDetailSerializer, Catego
                             CreateOrderSerializer, OrderSerializer
 
 
-class ProductListView(APIView):
-    """Вывод списка товаров"""
-    def get(self, request):
+#  class ProductListView(APIView):
+#  """Вывод списка товаров"""
+#   def get(self, request):
+#       products = Product.objects.all()
+#        serializer = ProductListSerializer(products, many=True)
+#        return Response(serializer.data)
+
+
+class ProductGListView(generics.ListAPIView):
+    """Вывод списка с помощью дженериков"""
+    serializer_class = ProductListSerializer
+
+    def get_queryset(self):
         products = Product.objects.all()
-        serializer = ProductListSerializer(products, many=True)
-        return Response(serializer.data)
+        return products
 
 
-class ProductDetailView(APIView):
-    """вывод отдельного продукта"""
-    def get(self, request, pk):
-        product = Product.objects.get(id=pk, )
-        serializer = ProductDetailSerializer(product)
-        return Response(serializer.data)
+#  class ProductDetailView(APIView):
+#    """вывод отдельного продукта"""
+#    def get(self, request, pk):
+#        product = Product.objects.get(id=pk, )
+#       serializer = ProductDetailSerializer(product)
+#       return Response(serializer.data)
+
+
+class ProductGDetailView(generics.RetrieveAPIView):
+    """вывод отдельного продукта через дженерики"""
+    queryset = Product.objects.all()
+    serializer_class = ProductDetailSerializer
+
+
 
 
 class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
@@ -53,7 +70,10 @@ class CategoryPagination(PageNumberPagination):
     max_page_size = 10
 
 
-class CategoryList(ListAPIView):
+#  remember ordering!
+
+
+class CategoryList(generics.ListAPIView):
     """отображение категорий"""
     serializer_class = CategoryListSerializer
     pagination_class = CategoryPagination

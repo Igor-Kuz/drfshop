@@ -20,8 +20,10 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path("product/", ProductListView.as_view()),
-    path("product/<int:pk>/", ProductDetailView.as_view()),
+#    path("product/", ProductListView.as_view()),
+    path("product/", ProductGListView.as_view()),
+#    path("product/<int:pk>/", ProductDetailView.as_view()),
+    path("product/<int:pk>/", ProductGDetailView.as_view()),
     path("product-filter/", ProductsList.as_view()),
     path("categorys/", CategoryList.as_view()),
     path("categories/", CategoryCreateAPIView.as_view()),
