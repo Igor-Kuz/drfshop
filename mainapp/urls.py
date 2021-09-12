@@ -29,6 +29,7 @@ urlpatterns = [
     path("categories/", CategoryCreateAPIView.as_view()),
     path("create-categories/<str:id>/", ListCreateCategoryAPIView.as_view()),
     path("cart-list/", CartListAPIView.as_view()),
+    path("cart-list2/<int:pk>/", CartListGAPIView.as_view()),
     path("cartproduct/", CartCreateAPIView.as_view()),
     path("newcartproduct/<int:pk>/", CartProductCreateAPIView.as_view()),
     path("create-order/", CreatOrderAPIView.as_view()),

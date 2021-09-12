@@ -21,7 +21,7 @@ from .serializers import ProductListSerializer,  ProductDetailSerializer, Catego
 class ProductGListView(generics.ListAPIView):
     """Вывод списка с помощью дженериков"""
     serializer_class = ProductListSerializer
-
+   # permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         products = Product.objects.all()
         return products
@@ -104,6 +104,13 @@ class CartListAPIView(APIView):
         serializer = CartSerializer(cart_list, many=True)
         return Response(serializer.data)
     #  -> cart product +cart
+
+
+class CartListGAPIView(generics.RetrieveAPIView):
+    """"""
+    queryset = Cart.objects.filter(in_order=False)
+    serializer_class = CartSerializer
+    lookup_field = 'pk'
 
 
 # class CartCreateAPIView(APIView):
