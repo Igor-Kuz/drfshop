@@ -40,13 +40,23 @@ class CategoryCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    """Добавление товара"""
+    product = ProductDetailSerializer()
+
+    class Meta:
+        model = CartProduct
+        fields = "__all__"
+
+
 class CartSerializer(serializers.ModelSerializer):
     """отображение корзины"""
+    products = ProductSerializer(many=True)
 
     class Meta:
         model = Cart
         fields = [
-            'category', 'title', 'description', 'price'
+            'products'
         ]
 
 
@@ -57,13 +67,6 @@ class CreateCartSerializer(serializers.ModelSerializer):
         fields = [
            'owner', 'products'
         ]
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    """Добавление товара"""
-    class Meta:
-        model = CartProduct
-        fields = "__all__"
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):

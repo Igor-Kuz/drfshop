@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
@@ -22,6 +22,7 @@ class ProductGListView(generics.ListAPIView):
     """Вывод списка с помощью дженериков"""
     serializer_class = ProductListSerializer
    # permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
         products = Product.objects.all()
         return products
@@ -41,8 +42,6 @@ class ProductGDetailView(generics.RetrieveAPIView):
     serializer_class = ProductDetailSerializer
 
 
-
-
 class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
     pass
 
@@ -51,6 +50,7 @@ class ProductFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name='price', lookup_expr='gte')
     max_price = filters.NumberFilter(field_name='price', lookup_expr='lte')
     category = CharFilterInFilter(field_name='category__name', lookup_expr='in')
+   # name = CharFilterInFilter(field_name='title__name', lookup_expr='in')
 
     class Meta:
         model = Product
@@ -106,11 +106,14 @@ class CartListAPIView(APIView):
     #  -> cart product +cart
 
 
-class CartListGAPIView(generics.RetrieveAPIView):
+class CartListGAPIView(generics.ListAPIView):
     """"""
-    queryset = Cart.objects.filter(in_order=False)
     serializer_class = CartSerializer
-    lookup_field = 'pk'
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Cart.objects.filter(owner=self.request.user.customer, in_order=False)
+
 
 
 # class CartCreateAPIView(APIView):
@@ -133,7 +136,7 @@ class CartCreateAPIView(generics.CreateAPIView):
     #     return Response(status=201)
 
 
-class CartProductCreateAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
+class CartProductCreateAPIView(ListCreateAPIView, RetrieveUpdateDestroyAPIView):
     """Работем с классом cart product"""
     serializer_class = ProductSerializer
     queryset = CartProduct.objects.all()
@@ -150,7 +153,7 @@ class CreatOrderAPIView(generics.ListCreateAPIView):
         return Order.objects.filter(customer=self.request.user.customer)
 
     def perform_create(self, serializer):
-        cart = Cart.objects.get(owner=self.request.user.customer, in_order=False)
+        cart = Cart.objects.get(owner=self.request.user.customer, in_order=False)  # products not null
         serializer.save(cart=cart, customer=self.request.user.customer)
         cart.in_order = True
         cart.save()
@@ -165,3 +168,7 @@ class OrderAPIView(generics.RetrieveAPIView):
         return Order.objects.filter(customer=self.request.user.customer)
 
 #  -> generics
+# Поиск по имени товарв,
+# в заказе не должно быть нулевых пролдуктов
+#  оставлю на дженериках
+# поправить url

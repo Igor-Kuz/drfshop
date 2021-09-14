@@ -18,6 +18,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('swagger(?P<format>\.json|\.yaml)', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 #    path("product/", ProductListView.as_view()),
@@ -29,7 +30,7 @@ urlpatterns = [
     path("categories/", CategoryCreateAPIView.as_view()),
     path("create-categories/<str:id>/", ListCreateCategoryAPIView.as_view()),
     path("cart-list/", CartListAPIView.as_view()),
-    path("cart-list2/<int:pk>/", CartListGAPIView.as_view()),
+    path("cart-list2/", CartListGAPIView.as_view()),
     path("cartproduct/", CartCreateAPIView.as_view()),
     path("newcartproduct/<int:pk>/", CartProductCreateAPIView.as_view()),
     path("create-order/", CreatOrderAPIView.as_view()),
