@@ -50,11 +50,11 @@ class ProductFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name='price', lookup_expr='gte')
     max_price = filters.NumberFilter(field_name='price', lookup_expr='lte')
     category = CharFilterInFilter(field_name='category__name', lookup_expr='in')
-   # name = CharFilterInFilter(field_name='title__name', lookup_expr='in')
+    title = CharFilterInFilter(field_name='title', lookup_expr='in')
 
     class Meta:
         model = Product
-        fields = ['category', 'min_price', 'max_price']
+        fields = ['category', 'title', 'min_price', 'max_price']
 
 
 class ProductsList(generics.ListAPIView):
