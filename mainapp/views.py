@@ -168,6 +168,6 @@ class OrderAPIView(generics.RetrieveAPIView):
         return Order.objects.filter(customer=self.request.user.customer)
 
 #  -> generics
-# Поиск по имени товарв,
-# в заказе не должно быть нулевых пролдуктов
-# поправить url
+#   Поиск по имени товарв,
+#  в заказе не должно быть нулевых пролдуктов
+#  поправить url
