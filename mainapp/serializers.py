@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, CartProduct, Cart, Customer, Order
+from .models import Category, Product, CartProduct, Cart, Order
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ("image",)
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -62,6 +62,8 @@ class CartSerializer(serializers.ModelSerializer):
 
 class CreateCartSerializer(serializers.ModelSerializer):
     """добавление товара"""
+    products = ProductSerializer(many=True)
+
     class Meta:
         model = Cart
         fields = [
@@ -71,9 +73,10 @@ class CreateCartSerializer(serializers.ModelSerializer):
 
 class CreateOrderSerializer(serializers.ModelSerializer):
     """Создание заказа"""
+
     class Meta:
         model = Order
-        exclude = ("customer", "status", 'cart')
+        exclude = ("customer", "status",)
 
 
 class OrderSerializer(serializers.ModelSerializer):
