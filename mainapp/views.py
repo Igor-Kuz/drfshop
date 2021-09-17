@@ -170,5 +170,4 @@ class OrderAPIView(generics.RetrieveAPIView):
 #  -> generics
 # Поиск по имени товарв,
 # в заказе не должно быть нулевых пролдуктов
-#  оставлю на дженериках
 # поправить url
