@@ -104,13 +104,11 @@ class CreatOrderAPIView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         cart = Cart.objects.get(owner=self.request.user.customer, in_order=False, total_products__gte=1)
         # products not null
-        serializer.save(cart=cart, customer=self.request.user.customer)
         cart.in_order = True
         cart.save()
-        Cart.objects.create(owner=self.request.user.customer)  # Создаёт объекты админке в Cart и Order
+        serializer.save(cart=cart, customer=self.request.user.customer)
+        # Cart.objects.create(owner=self.request.user.customer)  # Создаёт объекты админке в Cart и Order
         # Order.objects.create(customer=self.request.user.customer)  # создаёт 2 обекта в админке в поле Orders один
-        # с данными заказа, второй пустой с незаполнеными полями
-        # или в модели задать условие что cart null=False в модели Order
 
 
 class OrderAPIView(generics.RetrieveAPIView):
@@ -120,6 +118,3 @@ class OrderAPIView(generics.RetrieveAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(customer=self.request.user.customer)
-
-
-# в заказе не должно быть нулевых пролдуктов

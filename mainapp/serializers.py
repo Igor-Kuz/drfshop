@@ -76,11 +76,12 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        exclude = ("customer", "status",)
+        exclude = ("customer", "status")
 
 
 class OrderSerializer(serializers.ModelSerializer):
     """Вывод заказа"""
+
     class Meta:
         model = Order
         fields = "__all__"
