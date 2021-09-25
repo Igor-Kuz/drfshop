@@ -1,11 +1,19 @@
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from django_filters import rest_framework as filters
 from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
 from .models import *
-from .serializers import ProductListSerializer,  ProductDetailSerializer, CategoryListSerializer, \
-                            CreateCartSerializer, CategoryCreateSerializer, CartSerializer, ProductSerializer, \
-                            CreateOrderSerializer, OrderSerializer
+from .serializers import (
+    ProductListSerializer,
+    ProductDetailSerializer,
+    CategoryListSerializer,
+    CreateCartSerializer,
+    CategoryCreateSerializer,
+    CartSerializer,
+    ProductSerializer,
+    CreateOrderSerializer,
+    OrderSerializer
+)
 
 
 class ProductListView(generics.ListAPIView):
@@ -33,7 +41,7 @@ class ProductFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name='price', lookup_expr='gte')
     max_price = filters.NumberFilter(field_name='price', lookup_expr='lte')
     category = CharFilterInFilter(field_name='category__name', lookup_expr='in')
-    title = CharFilterInFilter(field_name='title', lookup_expr='in')  # iexact, icontains?
+    title = CharFilterInFilter(field_name='title', lookup_expr='icontains')
 
     class Meta:
         model = Product
@@ -51,7 +59,6 @@ class CategoryPagination(PageNumberPagination):
     page_size = 2
     page_size_query_param = 'page_size'
     max_page_size = 10
-#  remember ordering!
 
 
 class CategoryList(generics.ListAPIView):
@@ -67,7 +74,6 @@ class CreateCategoryAPIView(ListCreateAPIView, RetrieveUpdateAPIView):
     pagination_class = CategoryPagination
     queryset = Category.objects.all()
     lookup_field = 'id'
-    # int : id?
 
 
 class CartListAPIView(generics.ListAPIView):
@@ -103,12 +109,10 @@ class CreatOrderAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         cart = Cart.objects.get(owner=self.request.user.customer, in_order=False, total_products__gte=1)
-        # products not null
         cart.in_order = True
         cart.save()
         serializer.save(cart=cart, customer=self.request.user.customer)
-        # Cart.objects.create(owner=self.request.user.customer)  # Создаёт объекты админке в Cart и Order
-        # Order.objects.create(customer=self.request.user.customer)  # создаёт 2 обекта в админке в поле Orders один
+        Cart.objects.create(owner=self.request.user.customer)
 
 
 class OrderAPIView(generics.RetrieveAPIView):
