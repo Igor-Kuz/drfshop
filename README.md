@@ -1,11 +1,11 @@
 # drfshop
-Project to trane with django rest-framework
+REST API for ecommerce shop based on Django REST framework
 
-Репозиторий интернет-магазина на Django rest-framework
+Репозиторий API интернет-магазина на Django REST framework
 
 Открыть терминал или консоль и перейти в нужную Вам директорию
 
-Если Вы используете https, то: git clone https://github.com/Igor-Kuz/drfshop.git
+Если Вы используете https, то выполнить команду: git clone https://github.com/Igor-Kuz/drfshop.git
 
 Прописать следующие команды:
 
