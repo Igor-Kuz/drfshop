@@ -44,16 +44,15 @@ INSTALLED_APPS = [
     'django_filters',
     'djoser',
     'mainapp',
+    'corsheaders',
     'drf_yasg',
 ]
-
-
-
 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -189,6 +188,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8000"
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8000"
+]
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static_dev'),
