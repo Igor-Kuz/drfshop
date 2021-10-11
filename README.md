@@ -1,6 +1,8 @@
 # drfshop
 REST API for ecommerce shop based on Django REST framework
 
+[![Build Status](https://app.travis-ci.com/Igor-Kuz/drfshop.svg?branch=master)](https://app.travis-ci.com/Igor-Kuz/drfshop)
+
 Репозиторий API интернет-магазина на Django REST framework
 
 Открыть терминал или консоль и перейти в нужную Вам директорию
