@@ -1,5 +1,6 @@
-##Ecommerce shop built with Django REST framework
-###This project supports the following functions:
+
+## Ecommerce shop built with Django REST framework
+### This project supports the following functions:
 - filtration,
 - pagination,
 - search,
